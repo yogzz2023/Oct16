@@ -1,0 +1,47 @@
+To run an executable as a service that prints its output to the screen during boot up in Linux, you can create a systemd service unit. Here are the general steps to do this:
+
+1. Create a systemd service unit file:
+   Open a text editor with superuser privileges (e.g., `sudo nano`, `sudo vim`, or `sudo gedit`) and create a new service unit file in the `/etc/systemd/system/` directory. For example:
+
+   ```shell
+   sudo nano /etc/systemd/system/my_service.service
+   ```
+
+2. Add the following content to the service unit file:
+   Replace `my_service` with a name for your service, and adjust the `ExecStart` line to point to the location of your executable.
+
+   ```plaintext
+   [Unit]
+   Description=My Custom Service
+   After=network.target
+
+   [Service]
+   ExecStart=/path/to/your/executable
+   StandardOutput=tty
+   TTYPath=/dev/console
+   Restart=always
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+3. Save the file and exit the text editor.
+
+4. Reload the systemd configuration:
+   Run the following command to reload systemd's configuration and enable your service to start on boot:
+
+   ```shell
+   sudo systemctl daemon-reload
+   sudo systemctl enable my_service.service
+   ```
+
+5. Start the service:
+   You can start the service immediately with:
+
+   ```shell
+   sudo systemctl start my_service.service
+   ```
+
+Now, your service should run during boot up, and its output will be printed to the screen. You can view the output by switching to the appropriate TTY (e.g., Ctrl+Alt+F1 for the first virtual console).
+
+Please make sure to replace `/path/to/your/executable` with the actual path to your executable and customize other service settings as needed.
